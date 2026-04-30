@@ -1,4 +1,5 @@
 // Imports
+import "dotenv/config";
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -23,24 +24,41 @@ const app = express();
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'src/views'));
+
 /**
  * Declare Routes
  */
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "src/views/home.html"));
+    res.render("home", { title: "Welcome Home" });
 });
 
 app.get("/about", (req, res) => {
-    res.sendFile(path.join(__dirname, "src/views/about.html"));
+    res.render("about", { title: "About Me" });
 });
 
 app.get("/products", (req, res) => {
-    res.sendFile(path.join(__dirname, "src/views/products.html"));
+    res.render("products", { title: "Our Products" });
+});
+
+app.get("/student", (req, res) => {
+    const student = {
+        name: "Student Name",
+        id: "123456",
+        email: "name@example.com",
+        address: "123 University Way"
+    };
+
+    res.render('student', {
+        title: "Student Profile",
+        student
+    });
 });
 
 /**
  * Start server
  */
 app.listen(PORT, () => {
-    console.log(`Server is running on http://127.0.0.1:${PORT}`);
+     console.log(`Server running at http://localhost:${PORT}`);
 });
